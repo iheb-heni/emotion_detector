@@ -79,7 +79,7 @@ model = Sequential([
 
 Le modèle est ensuite sauvegardé :
 ```python
-model.save("/kaggle/working/emotion_detector_model.h5")
+model.save("/back/emotion_detector_model.h5")
 ```
 
 ---
@@ -119,6 +119,7 @@ flask-cors
 tensorflow==2.20.0
 pillow
 numpy
+...
 ```
 
 ### ▶️ Exécution du serveur

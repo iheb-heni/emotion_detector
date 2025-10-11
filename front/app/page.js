@@ -12,7 +12,7 @@ export default function Home() {
   const [status, setStatus] = useState("stopped");
   const [isLoading, setIsLoading] = useState(false);
 
-  const BACKEND_URL = "http://127.0.0.1:5000/predict";
+  const BACKEND_URL = "http://localhost:5000/predict";
 
   useEffect(() => {
     return () => {
@@ -23,8 +23,8 @@ export default function Home() {
   const startCamera = async () => {
     try {
       setIsLoading(true);
-      const stream = await navigator.mediaDevices.getUserMedia({ 
-        video: { width: 1280, height: 720 } 
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { width: 1280, height: 720 },
       });
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
@@ -85,7 +85,10 @@ export default function Home() {
         setConfidence(data.confidence);
       } else {
         console.warn("Backend error:", data);
-        if (data.error === "No face detected" || data.error === "Aucun visage détecté") {
+        if (
+          data.error === "No face detected" ||
+          data.error === "Aucun visage détecté"
+        ) {
           setEmotion(null);
           setConfidence(null);
         }
@@ -103,9 +106,12 @@ export default function Home() {
       surprised: "linear-gradient(135deg, #a3bded 0%, #6991c7 100%)",
       neutral: "linear-gradient(135deg, #d3d3d3 0%, #a9a9a9 100%)",
       fear: "linear-gradient(135deg, #b8cbb8 0%, #b8cbb8 100%)",
-      disgust: "linear-gradient(135deg, #c2e9c2 0%, #a8e6a8 100%)"
+      disgust: "linear-gradient(135deg, #c2e9c2 0%, #a8e6a8 100%)",
     };
-    return colors[emotion?.toLowerCase()] || "linear-gradient(135deg, #d3d3d3 0%, #a9a9a9 100%)";
+    return (
+      colors[emotion?.toLowerCase()] ||
+      "linear-gradient(135deg, #d3d3d3 0%, #a9a9a9 100%)"
+    );
   };
 
   const getEmotionEmoji = (emotion) => {
@@ -116,10 +122,25 @@ export default function Home() {
       surprised: "😲",
       neutral: "😐",
       fear: "😨",
-      disgust: "🤢"
+      disgust: "🤢",
     };
     return emojis[emotion?.toLowerCase()] || "❓";
   };
+
+  const socialLinks = [
+    {
+      name: "Portfolio",
+      icon: "🌐",
+      url: "https://ihebheni.infinityfreeapp.com/",
+    },
+    {
+      name: "LinkedIn",
+      icon: "💼",
+      url: "https://www.linkedin.com/in/iheb-heni/",
+    },
+    { name: "GitHub", icon: "🐙", url: "https://github.com/iheb-heni" },
+    { name: "WhatsApp", icon: "💬", url: "https://wa.me/+21654670322" },
+  ];
 
   return (
     <>
@@ -482,6 +503,91 @@ export default function Home() {
           font-size: 0.9rem;
           color: #00acc0ff;
         }
+
+         /* Social Links Card */
+        .social-card {
+          background: var(--glass-bg);
+          backdrop-filter: blur(40px);
+          border: 1px solid var(--glass-border);
+          border-radius: 1.5rem;
+          padding: 1.5rem;
+          box-shadow: var(--shadow);
+          margin-top: 1rem;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .social-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 1px;
+          background: transparent;
+        }
+
+        .social-title {
+          font-size: 1rem;
+          font-weight: 600;
+          margin-bottom: 1rem;
+          text-align: center;
+          color: var(--text-primary);
+        }
+
+        .social-links {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 0.5rem;
+        }
+
+        .social-link {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          padding: 0.75rem;
+          border-radius: 1rem;
+          background: rgba(0, 0, 0, 0.05);
+          text-decoration: none;
+          color: var(--text-primary);
+          transition: all 0.3s ease;
+          text-align: center;
+          border: 1px solid transparent;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .social-link::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.1), transparent);
+          transition: left 0.5s;
+        }
+
+        .social-link:hover::before {
+          left: 100%;
+        }
+
+        .social-link:hover {
+          transform: translateY(-2px);
+          background:  rgba(0, 0, 0, 0.1);
+          border-color:  transparent};
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .social-icon {
+          font-size: 1.5rem;
+          margin-bottom: 0.25rem;
+        }
+
+        .social-name {
+          font-size: 0.7rem;
+          font-weight: 500;
+        }
       `}</style>
 
       <div className="container">
@@ -497,7 +603,8 @@ export default function Home() {
           <div className="header">
             <h1 className="title">Emotion AI</h1>
             <p className="subtitle">
-              Découvrez la puissance de l&apos;IA pour analyser vos émotions en temps réel
+              Discover the power of Artificial Intelligence to analyze your
+              emotions in real time
             </p>
           </div>
 
@@ -505,21 +612,24 @@ export default function Home() {
             {/* Video Section */}
             <div className="card">
               <div className="video-container">
-                <video 
-                  ref={videoRef} 
-                  className="video"
-                />
+                <video ref={videoRef} className="video" />
                 <canvas ref={canvasRef} style={{ display: "none" }} />
-                
-                <div className={`status-indicator ${status === "running" ? "status-running" : "status-stopped"}`}>
-                  ● {status === "running" ? "En direct" : "Arrêté"}
+
+                <div
+                  className={`status-indicator ${
+                    status === "running" ? "status-running" : "status-stopped"
+                  }`}
+                >
+                  ● {status === "running" ? "Live" : "Stopped"}
                 </div>
 
                 {isLoading && (
                   <div className="loading-overlay">
-                    <div style={{ textAlign: 'center', color: 'white' }}>
+                    <div style={{ textAlign: "center", color: "white" }}>
                       <div className="spinner"></div>
-                      <p style={{ marginTop: '1rem' }}>Initialisation de la caméra...</p>
+                      <p style={{ marginTop: "1rem" }}>
+                        Initializing camera...
+                      </p>
                     </div>
                   </div>
                 )}
@@ -534,71 +644,108 @@ export default function Home() {
                 >
                   {isLoading ? (
                     <>
-                      <div className="spinner" style={{ width: '1rem', height: '1rem', borderWidth: '2px' }}></div>
-                      Chargement...
+                      <div
+                        className="spinner"
+                        style={{
+                          width: "1rem",
+                          height: "1rem",
+                          borderWidth: "2px",
+                        }}
+                      ></div>
+                      Loading...
                     </>
                   ) : (
                     <>
                       <span>🎬</span>
-                      Démarrer
+                      Start
                     </>
                   )}
                 </button>
-                
+
                 <button
                   onClick={stopCamera}
                   disabled={!streaming}
                   className="btn btn-stop"
                 >
                   <span>⏹️</span>
-                  Arrêter
+                  Stop
                 </button>
+              </div>
+
+              {/* Social Links Card */}
+              <div className="social-card">
+                <h3 className="social-title">Connect with Me</h3>
+                <div className="social-links">
+                  {socialLinks.map((link, index) => (
+                    <a
+                      key={index}
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="social-link"
+                    >
+                      <span className="social-icon">{link.icon}</span>
+                      <span className="social-name">{link.name}</span>
+                    </a>
+                  ))}
+                </div>
               </div>
             </div>
 
             {/* Results Section */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "1.5rem",
+              }}
+            >
               {/* Emotion Display */}
               <div className="card emotion-display">
-                <h2 className="emotion-title">Analyse en Temps Réel</h2>
-                
+                <h2 className="emotion-title">Real-Time Analysis</h2>
+
                 {emotion ? (
                   <div>
-                    <div 
+                    <div
                       className="emotion-emoji"
                       style={{ background: getEmotionColor(emotion) }}
                     >
                       {getEmotionEmoji(emotion)}
                     </div>
-                    
-                    <h3 className="emotion-name">
-                      {emotion}
-                    </h3>
-                    
+
+                    <h3 className="emotion-name">{emotion}</h3>
+
                     <div className="confidence-bar">
-                      <div 
+                      <div
                         className="confidence-fill"
-                        style={{ 
+                        style={{
                           width: `${confidence}%`,
-                          background: getEmotionColor(emotion)
+                          background: getEmotionColor(emotion),
                         }}
                       ></div>
                     </div>
-                    
-                    <p className="confidence-text">
-                      Confiance : {confidence}%
-                    </p>
+
+                    <p className="confidence-text">Confidence: {confidence}%</p>
                   </div>
                 ) : (
                   <div className="no-emotion">
-                    <div className="no-emotion-emoji">
-                      🎭
-                    </div>
-                    <p style={{ color: 'rgba(18, 17, 17, 0.7)', fontSize: '1.1rem', marginBottom: '0.5rem' }}>
-                      {streaming ? "Analyse en cours..." : "En attente de démarrage"}
+                    <div className="no-emotion-emoji">🎭</div>
+                    <p
+                      style={{
+                        color: "rgba(18, 17, 17, 0.7)",
+                        fontSize: "1.1rem",
+                        marginBottom: "0.5rem",
+                      }}
+                    >
+                      {streaming ? "Analyzing..." : "Waiting to start"}
                     </p>
-                    <p style={{ color: 'rgba(3, 3, 3, 0.5)', fontSize: '0.9rem' }}>
-                      Aucune émotion détectée pour le moment
+                    <p
+                      style={{
+                        color: "rgba(3, 3, 3, 0.5)",
+                        fontSize: "0.9rem",
+                      }}
+                    >
+                      No emotion detected yet
                     </p>
                   </div>
                 )}
@@ -606,25 +753,40 @@ export default function Home() {
 
               {/* Stats Card */}
               <div className="card">
-                <h3 style={{ fontSize: '1.4rem', fontWeight: '700', marginBottom: '1.5rem' }}>Informations</h3>
+                <h3
+                  style={{
+                    fontSize: "1.4rem",
+                    fontWeight: "700",
+                    marginBottom: "1.5rem",
+                  }}
+                >
+                  Information
+                </h3>
                 <div className="stats-grid">
                   <div className="stat-item">
-                    <div className="stat-label">Fréquence</div>
+                    <div className="stat-label">Frequency</div>
                     <div className="stat-value">800ms</div>
                   </div>
                   <div className="stat-item">
-                    <div className="stat-label">Résolution</div>
+                    <div className="stat-label">Resolution</div>
                     <div className="stat-value">480p</div>
                   </div>
                   <div className="stat-item">
-                    <div className="stat-label">Statut</div>
-                    <div className="stat-value" style={{ color: status === "running" ? '#4ade80' : '#f87171' }}>
-                      {status === "running" ? "Actif" : "Inactif"}
+                    <div className="stat-label">Status</div>
+                    <div
+                      className="stat-value"
+                      style={{
+                        color: status === "running" ? "#4ade80" : "#f87171",
+                      }}
+                    >
+                      {status === "running" ? "Active" : "Inactive"}
                     </div>
                   </div>
                   <div className="stat-item">
-                    <div className="stat-label">Détection</div>
-                    <div className="stat-value">{emotion ? "Active" : "En attente"}</div>
+                    <div className="stat-label">Detection</div>
+                    <div className="stat-value">
+                      {emotion ? "Active" : "Waiting"}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -634,16 +796,14 @@ export default function Home() {
           {/* Footer Info */}
           <div className="footer">
             <p>
-              L&apos;IA analyse les expressions faciales en temps réel avec une précision avancée. 
-              Les données sont traitées localement et respectent votre vie privée.
+              The AI analyzes facial expressions in real time with advanced
+              accuracy. All data is processed locally to protect your privacy.
             </p>
           </div>
         </div>
 
         {/* Floating Badge */}
-        <div className="floating-badge">
-          Powered by Iheb heni
-        </div>
+        <div className="floating-badge">Powered by Iheb Heni</div>
       </div>
     </>
   );

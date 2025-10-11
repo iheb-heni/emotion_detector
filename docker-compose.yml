@@ -1,0 +1,27 @@
+# version: "3.9"
+
+services:
+  backend:
+    build:
+      context: ./back
+    container_name: emotion_backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./back:/app         # 👈 Synchronise ton code local avec le conteneur
+    environment:
+      - FLASK_ENV=development   # 👈 Active le mode auto-reload Flask
+    command: flask run --host=0.0.0.0 --port=5000
+
+  frontend:
+    build:
+      context: ./front
+    container_name: emotion_frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./front:/app            # 👈 Synchronise ton code local avec le conteneur
+      - /app/node_modules       # 👈 Empêche les conflits node_modules
+    environment:
+      - NODE_ENV=development    # 👈 Active le hot reload de Next.js
+    command: npm run dev        # 👈 Démarre Next.js en mode dev

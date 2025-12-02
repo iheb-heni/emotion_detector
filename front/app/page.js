@@ -12,7 +12,7 @@ export default function Home() {
   const [status, setStatus] = useState("stopped");
   const [isLoading, setIsLoading] = useState(false);
 
-  const BACKEND_URL = "http://localhost:5000/predict";
+  const BACKEND_URL = "https://emotion-detector-1-qvrg.onrender.com/predict";
 
   useEffect(() => {
     return () => {

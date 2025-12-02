@@ -12,8 +12,7 @@ export default function Home() {
   const [status, setStatus] = useState("stopped");
   const [isLoading, setIsLoading] = useState(false);
 
-  const BACKEND_URL = "https://emotion-detector-1-qvrg.onrender.com/predict";
-
+  const API_URL = "https://emotion-detector-1-qvrg.onrender.com/predict";
   useEffect(() => {
     return () => {
       stopCamera();
@@ -73,7 +72,7 @@ export default function Home() {
 
       const dataUrl = canvas.toDataURL("image/jpeg", 0.8);
 
-      const res = await fetch(BACKEND_URL, {
+      const res = await fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ image: dataUrl }),

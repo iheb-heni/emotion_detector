@@ -190,7 +190,7 @@ C -->|Prédiction| B
 
 **Heni Iheb**  
 Full-Stack Web Developer & AI Enthusiast  
-📧 Contact : [LinkedIn](#) | [Portfolio](#)
+📧 Contact : [LinkedIn](https://www.linkedin.com/in/iheb-heni/) | [Portfolio](https://ihebheni.infinityfreeapp.com/)
 
 ---
 
